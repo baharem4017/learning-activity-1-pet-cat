@@ -1,0 +1,25 @@
+Pet and Cat Information
+
+1. Enter pet and cat information
+2. Exit
+
+Choose an option (1-2): 1
+
+Pet name: dobby
+Pet age in years: 0
+Pet additional months: 6
+Cat name: bj
+Cat age in years: 3
+Cat additional months: 2
+Cat breed: jhgfuf
+Error: Cat breed was not found in the online reference.
+Help: Check the spelling and enter the full breed name, such as Persian or Scottish Fold.
+Cat breed: Persian
+
+Pet Information:
+   Name: dobby
+   Age: 6 months
+Pet Information:
+   Name: bj
+   Age: 3 years and 2 months
+   Breed: Persian
