@@ -1,0 +1,42 @@
+Pet name: Dobby
+Pet age in years: 2
+Pet additional months: 0
+Cat name: Luna
+Cat age in years: 0
+Cat additional months: 7
+Cat breed: persian
+Notice: Using the saved breed reference without an API key.
+
+Pet Information:
+   Name: Dobby
+   Age: 2 years
+Pet Information:
+   Name: Luna
+   Age: 7 months
+   Breed: persian
+
+Pet and Cat Information
+
+1. Enter pet and cat information
+2. Exit
+
+Choose an option (1-2): 1
+
+Pet name: Dobby
+Pet age in years: 1
+Pet additional months: 0
+Cat name: Luna
+Cat age in years: 0
+Cat additional months: 6
+Cat breed: jhgfuf
+Error: Cat breed was not found in the breed reference.
+Help: Check the spelling and enter the full breed name, such as Persian or Scottish Fold.
+Cat breed: Persian
+
+Pet Information:
+   Name: Dobby
+   Age: 1 year
+Pet Information:
+   Name: Luna
+   Age: 6 months
+   Breed: Persian
