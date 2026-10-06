@@ -81,8 +81,11 @@ python main.py
 Alternatively, open the extracted project in PyCharm,
 select an installed Python 3 interpreter, and run main.py.
 
-Do not configure CAT_API_KEY when testing the saved-reference
-behavior.
+No CAT_API_KEY is needed for saved-reference verification.
+Leave it unset when testing this behavior.
+
+The files in data do not automatically become console input.
+Enter answers at the program's prompts.
 
 ## Menu
 
@@ -123,7 +126,7 @@ Pet additional months: 0
 Cat name: Luna
 Cat age in years: 0
 Cat additional months: 7
-Cat breed: persian
+Cat breed: Persian
 Notice: Using the saved breed reference without an API key.
 
 Pet Information:
@@ -132,11 +135,14 @@ Pet Information:
 Pet Information:
    Name: Luna
    Age: 7 months
-   Breed: persian
+   Breed: Persian
 ```
 
 The saved-reference notice appears when the reference is first
 loaded successfully during a program session.
+
+Each attribute line begins with three spaces.
+PyCharm's process-completion message is not program output.
 
 ## Understanding the Output
 
@@ -153,6 +159,8 @@ Age formatting uses only the relevant units:
 - 2 years and 3 months: 2 years and 3 months.
 - 1 year and 1 month: 1 year and 1 month.
 - 0 years and 0 months: 0 months.
+
+These examples describe the formatting rules.
 
 ## Validation Rules
 
@@ -206,7 +214,7 @@ The saved file records:
 When CAT_API_KEY is configured, the program first attempts
 online verification.
 
-If the online reference is unavailable, it attempts to use
+If the online reference cannot be loaded, it attempts to use
 the saved file.
 
 Without CAT_API_KEY, it uses the saved file directly.
@@ -231,6 +239,9 @@ Error: Cat breed was not found in the breed reference.
 Help: Check the spelling and enter the full breed name, such as Persian or Scottish Fold.
 Cat breed: Persian
 ```
+
+After the corrected breed is accepted, the program prints
+the completed Pet and Cat information.
 
 A missing match means the entry was not found in the reference.
 It does not prove that a breed does not exist.
@@ -281,7 +292,8 @@ in the current record have been accepted.
 
 ## Verification
 
-The following behaviors were observed in local runs:
+The following behaviors were observed in local runs during
+development:
 
 - Earlier basic Q1 sample completed with exit code 0.
 - Earlier sample_actual.txt and sample_expected.txt were
@@ -305,12 +317,19 @@ The following behaviors were observed in local runs:
 - End of input at Pet name displayed the missing-field message.
 - Menu option 2 displayed Goodbye and exited successfully.
 
-These observations cover the demonstrated cases.
-They do not establish that every possible case has been tested.
+A fresh copy of the repository was downloaded and run in
+PyCharm on October 6, 2026, without an API key.
+The saved breed reference was used successfully.
+The program printed Dobby's age as 2 years and Luna's age
+as 7 months, with Persian as the Cat breed.
+It exited with code 0 after choosing menu option 2.
 
-A fresh download of the latest repository still needs to be
-run without an API key to confirm that all required files
-are included.
+The fresh-copy test used an existing Python interpreter
+on the same computer. It was not a test on a second computer.
+
+These observations cover the demonstrated cases.
+They do not establish that every possible case has been tested
+or that all earlier tests were repeated after the latest changes.
 
 ## Limitations
 
@@ -323,6 +342,7 @@ are included.
 - Alternative spellings, aliases, or unlisted breeds
   may be rejected.
 - Text rules and length limits are chosen project policies.
+- No formal execution-time or memory benchmark has been recorded.
 - Not every error condition or interruption point has
   been tested.
 - Operating-system failures and unexpected programming
