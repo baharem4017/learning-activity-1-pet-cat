@@ -36,6 +36,7 @@ class ReturnToMenu(Exception):
 def read_line(field):
     try:
         return input(f"{field}: ")
+
     except EOFError:
         raise IncompleteInputError(field) from None
 
@@ -46,6 +47,7 @@ def read_interactive_field(field, validator):
 
         try:
             return validator(raw, field)
+
         except ValueError as error:
             print(error)
 
@@ -78,7 +80,7 @@ def read_interactive_age(pet_label):
 def choose_service_recovery():
     while True:
         print()
-        print("1. Retry online verification")
+        print("1. Retry breed verification")
         print("2. Return to the main menu")
 
         choice = read_line("Choose an option (1-2)").strip()
@@ -88,8 +90,8 @@ def choose_service_recovery():
 
         print("Error: Menu choice must be 1 or 2.")
         print(
-            "Help: Enter 1 to retry "
-            "or 2 to return to the main menu."
+            "Help: Enter 1 to retry or "
+            "2 to return to the main menu."
         )
 
 
@@ -137,6 +139,7 @@ def run_interactive():
 
     cat_breed = read_cat_breed()
 
+    # Create both objects only after all fields are valid.
     pet = Pet(
         name=pet_name,
         age=pet_years,
@@ -171,6 +174,7 @@ def main():
 
                 try:
                     run_interactive()
+
                 except ReturnToMenu:
                     print(
                         "Entry stopped. "
@@ -179,7 +183,7 @@ def main():
 
             elif choice == "2":
                 print("Goodbye.")
-                return 0
+                return
 
             else:
                 print("Error: Menu choice must be 1 or 2.")
