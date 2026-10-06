@@ -1,0 +1,15 @@
+Q1 Sample Verification
+
+Execution date: October 6, 2026
+Environment: PyCharm on macOS
+Python version: 3.14.7
+
+Instructor sample: Passed.
+Program exit code: 0.
+
+The actual output was compared with the expected output
+using PyCharm Compare Files.
+PyCharm displayed: Contents are identical.
+
+Additional validation tests: Not executed.
+Years-and-months extension: Not implemented.
