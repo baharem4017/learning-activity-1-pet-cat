@@ -12,9 +12,9 @@ Pet stores name and age. Cat inherits from Pet and adds breed.
 Both objects use Pet.print_info() without a Cat override.
 The Cat breed is printed separately.
 
-The current program extends Q1 with a menu, input validation,
-age entry in years and months, and online breed verification.
-These additional features are project extensions.
+The current program extends Q1 with an interactive menu,
+input validation, age entry in years and months, and online
+breed verification. These features are project extensions.
 
 ## Requirements
 
@@ -22,8 +22,8 @@ These additional features are project extensions.
 - Development environment: Python 3.14.7, PyCharm, macOS.
 - Internet access for the first successful breed lookup in each run.
 - A personal The Cat API key.
-- The program uses Python's standard library; no additional
-  application packages are required.
+- The application uses Python's standard library.
+- No additional application packages are required.
 
 Get an API key:
 https://www.thecatapi.com/signup
@@ -32,17 +32,17 @@ https://www.thecatapi.com/signup
 
 | File | Purpose |
 |---|---|
-| main.py | Classes, menu, input recovery, and output |
+| main.py | Pet and Cat classes, menu, input recovery, and output |
 | validation.py | Text and integer validation |
 | age_utils.py | Age formatting with year/month units |
 | breed_service.py | Online breed lookup and connection handling |
 | data/breed_validation_actual.txt | Recorded breed rejection and correction |
 | data/sample_input.txt | Original five-line instructor sample |
 | data/sample_expected.txt | Original required sample output |
-| data/sample_actual.txt | Output captured from the earlier basic solution |
+| data/sample_actual.txt | Output recorded from the earlier basic solution |
 
 The original sample files document the earlier basic solution.
-The current interactive program uses a menu and seven data fields.
+The current program uses a menu and seven data fields.
 Do not use the original five-line input file as its input sequence.
 
 ## Set Up in PyCharm
@@ -68,10 +68,12 @@ from the Applications folder for the installed Python version.
 
 For the development installation, the location was:
 
+```text
 /Applications/Python 3.14/Install Certificates.command
+```
 
-Restart the program after installation. Do not disable HTTPS
-certificate verification.
+Restart the program after installation.
+Do not disable HTTPS certificate verification.
 
 ## Run
 
@@ -111,10 +113,17 @@ export CAT_API_KEY='YOUR_API_KEY'
 python3 main.py
 ```
 
-Replace YOUR_API_KEY locally. This setting applies to that terminal
-session and is separate from PyCharm's run configuration.
+Replace YOUR_API_KEY locally with your own key.
+The setting applies to that terminal session and is separate
+from PyCharm's run configuration.
 
-## Example
+If using the project's existing virtual environment:
+
+```bash
+.venv/bin/python main.py
+```
+
+## Example Run
 
 Select menu option 1, then enter:
 
@@ -141,8 +150,25 @@ Pet Information:
 ```
 
 Each attribute line begins with three spaces.
-The first block describes the Pet; the second describes the Cat.
-Cat reuses Pet.print_info(), and breed is printed separately.
+
+## Understanding the Output
+
+The first information block describes the generic Pet.
+The second information block describes the Cat.
+
+Pet and Cat are separate objects with separate state.
+Cat inherits print_info() from Pet without overriding it.
+A separate statement prints breed after cat.print_info().
+
+Age displays only the relevant units:
+
+| Completed years | Additional months | Display |
+|---|---|---|
+| 0 | 7 | 7 months |
+| 2 | 0 | 2 years |
+| 1 | 1 | 1 year and 1 month |
+| 2 | 3 | 2 years and 3 months |
+| 0 | 0 | 0 months |
 
 ## Validation Rules
 
@@ -152,8 +178,8 @@ Cat reuses Pet.print_info(), and breed is printed separately.
 - English letters, ordinary spaces, hyphens, and apostrophes only.
 - Must contain at least one letter.
 - Digits and control characters are rejected.
-- Outer spaces are removed; internal spaces and capitalization
-  are preserved.
+- Outer spaces are removed.
+- Internal spaces and capitalization are preserved.
 
 These are chosen project rules, not universal naming standards.
 
@@ -161,7 +187,8 @@ These are chosen project rules, not universal naming standards.
 
 - Years must be a nonnegative whole number.
 - Additional months must be a whole number from 0 to 11.
-- Both fields are required; blank values are not replaced with zero.
+- Both fields are required.
+- Blank values are not replaced with zero.
 - Decimals, words, scientific notation, and separators are rejected.
 - A leading sign and leading zeros are accepted when the resulting
   value is nonnegative.
@@ -185,24 +212,64 @@ This does not prove that the breed does not exist elsewhere.
 Successful reference data is reused in memory during the same run.
 It is not saved for use after restarting the program.
 
-## Error Recovery
+## Error Messages and Recovery
 
-- An invalid name, integer format, or negative value retries only
+Each rejected input produces an error message and short guidance.
+
+- Invalid text, integer formats, and negative values retry only
   the affected field.
 - Additional months above 11 restart that pet's year/month pair.
 - A breed not found in the reference retries only the breed.
-- A connection or service failure allows retrying the same breed
+- Connection or service failures allow retrying the same breed
   or returning to the main menu.
 - Returning to the main menu discards the unfinished record.
 - No completed information blocks are printed until all fields,
-  including the breed lookup, are accepted.
-- End-of-file stops the program with a missing-field message.
-- Ctrl+C stops the program with a cancellation notice.
-- Menu option 2 exits normally with status 0.
+  including breed verification, are accepted.
+- An invalid menu choice displays guidance and asks again.
+
+### Cancellation with Ctrl+C
+
+The program displays:
+
+```text
+Entry cancelled.
+You can run the program again when you are ready.
+```
+
+It then stops without printing an unfinished record.
+The cancellation handler uses return without a numeric value;
+the current program therefore exits with status 0 after cancellation.
+
+### End-of-File
+
+EOF means that no further input is available.
+It is different from pressing Enter to submit a blank field.
+
+For example, EOF while waiting for Pet name produces:
+
+```text
+Error: The input ended before Pet name was provided.
+Help: Run the program again and complete the entry.
+```
+
+The program stops with exit status 1.
+
+In a macOS terminal, Ctrl+D on an empty input line can signal EOF.
+
+### Normal Exit
+
+Menu option 2 prints:
+
+```text
+Goodbye.
+```
+
+The program exits with status 0.
 
 ## Verification
 
-Manual testing was performed in PyCharm on macOS on October 6, 2026.
+Manual testing was performed on October 6, 2026,
+using Python 3.14.7 on macOS.
 
 Observed during development:
 
@@ -210,42 +277,76 @@ Observed during development:
 - Blank Pet names were rejected and corrected.
 - Negative years and decimal ages were rejected and corrected.
 - Names containing digits were rejected.
-- Names and breed text longer than 30 characters were rejected.
+- Pet and Cat names longer than 30 characters were rejected.
+- Breed text longer than 30 characters was rejected.
 - Negative months displayed guidance specifying 0 to 11.
 - An invalid main-menu choice was rejected.
 - After resolving a local certificate issue, an unrecognized breed
   was rejected using the online reference.
-- Correcting that breed to Persian produced the complete result
-  while preserving the previously accepted names and ages.
+- Correcting the breed to Persian produced the complete result
+  while preserving accepted names and ages.
 - Menu option 2 printed Goodbye. and finished with exit code 0.
+- Ctrl+C at Pet name displayed the cancellation notice
+  and stopped without printing a completed result.
+- EOF at Pet name identified the missing field
+  and stopped without printing a completed result.
 
-The breed transcript is saved in data/breed_validation_actual.txt.
+The breed transcript is saved in:
 
-Earlier basic-solution verification:
-the instructor sample matched its expected output in PyCharm
-Compare Files, which reported Contents are identical.
-That result applies to the earlier five-input version.
+```text
+data/breed_validation_actual.txt
+```
+
+The Ctrl+C and EOF observations were made before changing
+the cancellation handler from return 130 to return.
+The revised cancellation exit status has not yet been verified.
+
+### Earlier Basic-Solution Verification
+
+The original instructor sample matched its expected output
+in PyCharm Compare Files, which reported:
+
+```text
+Contents are identical
+```
+
+That result applies to the earlier five-input version,
+not the current interactive interface.
+
+### Remaining Verification
 
 Not every test was repeated after every code revision.
-Comprehensive testing of the final version, EOF, Ctrl+C,
-all service failures, and execution from a fresh repository
-download remains to be completed.
 
-## Limitations and Improvements
+Remaining checks include:
+
+- Retesting cancellation after the handler change.
+- Testing EOF and Ctrl+C at other input fields.
+- Testing acceptance at the exact 30-character boundary.
+- Testing all service failure and recovery cases.
+- Running the documented setup from a fresh repository download.
+
+These checks are not marked Passed.
+
+## Limitations
 
 - The current program is interactive; it does not reproduce the
   original five-input, prompt-free assignment interface.
-- Breed acceptance depends on the online reference's coverage
-  and exact normalized names; aliases and mixed breeds may not match.
+- Breed acceptance depends on the reference's coverage and
+  exact normalized names.
+- Aliases and mixed breeds may not match the reference.
 - The first breed lookup requires internet access and a working key.
 - Age uses whole years and months; days are not represented.
 - Input limits do not guarantee handling of every possible failure.
 - Unexpected programming defects require debugging.
 - Runtime and memory usage have not been benchmarked.
 
-Potential improvements include documented breed aliases,
-a dated offline reference cache, automated regression tests,
-and a separate original-assignment entry point.
+## Potential Improvements
+
+- Documented breed aliases.
+- A dated offline reference cache.
+- Automated regression tests.
+- A separate original-assignment entry point.
+- Measured runtime and memory results.
 
 ## References
 
