@@ -202,7 +202,7 @@ def main():
             "You can run the program again when you are ready.",
             file=sys.stderr
         )
-        return 130
+        return
 
 
 if __name__ == "__main__":
