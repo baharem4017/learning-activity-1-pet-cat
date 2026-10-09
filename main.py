@@ -83,7 +83,7 @@ def choose_service_recovery():
         print("1. Retry breed verification")
         print("2. Return to the main menu")
 
-        choice = read_line("Choose an option (1-2)").strip()
+        choice = read_line("Choose an option (1-2)")
 
         if choice in ("1", "2"):
             return choice
@@ -167,7 +167,7 @@ def main():
             print("2. Exit")
             print()
 
-            choice = read_line("Choose an option (1-2)").strip()
+            choice = read_line("Choose an option (1-2)")
 
             if choice == "1":
                 print()
