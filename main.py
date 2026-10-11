@@ -1,213 +1,196 @@
-import sys
+"""Run the interactive Pet/Cat activity with controlled breed assignment.
 
-from validation import validate_text, validate_integer
-from age_utils import format_age
-from breed_service import validate_breed, BreedServiceError
+Keep validation.py, age_utils.py, breed_service.py beside this file. Cat inherits Pet.print_info(); breed is printed separately.
+Docstrings explain each component; comments explain statements and decisions.
+"""
+
+import sys  # Provide stderr and the program's exit status.
+
+from validation import validate_text, validate_integer  # Check names and numbers.
+from age_utils import format_age  # Convert years/months into readable text.
+from breed_service import validate_breed  # Check the local supported breed list.
 
 
 class Pet:
+    """Group a pet's name and age with the method that displays them."""
+
     def __init__(self, name, age, age_months=0):
-        self.name = name
-        self.age = age
-        self.age_months = age_months
+        """Store the supplied name, completed years, and additional months.
+
+        The interactive workflow validates these values before construction.
+        These three attributes remain public, as in the previous version.
+        """
+        self.name = name  # Store this object's name.
+        self.age = age  # Store completed years.
+        self.age_months = age_months  # Store remaining months; default is zero.
 
     def print_info(self):
-        print("Pet Information:")
-        print(f"   Name: {self.name}")
-        print(f"   Age: {format_age(self.age, self.age_months)}")
+        """Print the shared information; Cat inherits this method unchanged."""
+        print("Pet Information:")  # Print the required heading.
+        print(f"   Name: {self.name}")  # Indent the name by three spaces.
+        print(f"   Age: {format_age(self.age, self.age_months)}")  # Format the age.
 
 
 class Cat(Pet):
+    """Extend Pet with a breed accessed through a getter and validated setter.
+
+    __breed uses Python name mangling to discourage accidental direct access;
+    it is not a security barrier. Use get_breed() and set_breed() as the API.
+    """
+
     def __init__(self, name, age, breed, age_months=0):
-        self.name = name
-        self.age = age
-        self.age_months = age_months
-        self.breed = breed
+        """Initialize inherited attributes and accept only a verified breed.
+
+        ValueError propagates to the caller if validation
+        fails. In that case construction does not return a Cat to the caller.
+        """
+        Pet.__init__(self, name, age, age_months)  # Initialize this Cat's Pet data.
+        self.set_breed(breed)  # Use the same check for creation and later changes.
+
+    def get_breed(self):
+        """Return the accepted breed for display or other read-only use."""
+        return self.__breed  # Read the stored value without changing it.
+
+    def set_breed(self, breed):
+        """Validate and store a breed, preserving the previous value on failure.
+
+        validate_breed checks text and reference membership, returning accepted
+        text. It raises ValueError for invalid input or an unsupported breed.
+        The caller decides how to recover.
+        """
+        valid_breed = validate_breed(breed, "Cat breed")  # May raise before storing.
+        self.__breed = valid_breed  # Update only after verification succeeds.
 
 
 class IncompleteInputError(Exception):
-    pass
-
-
-class ReturnToMenu(Exception):
-    pass
+    """Identify the field that could not be read because input ended."""
+    pass  # Inherit Exception's behavior; no additional implementation is needed.
 
 
 def read_line(field):
-    try:
-        return input(f"{field}: ")
-
+    """Prompt for one line and translate EOF into a field-specific exception."""
+    try:  # Input may end before the user supplies the requested field.
+        return input(f"{field}: ")  # Return entered text without calling strip().
     except EOFError:
-        raise IncompleteInputError(field) from None
+        raise IncompleteInputError(field) from None  # Hide the original chain.
 
 
 def read_interactive_field(field, validator):
-    while True:
-        raw = read_line(field)
-
+    """Retry this field after invalid input; return the validator's result."""
+    while True:  # Continue until a valid value is returned.
+        raw = read_line(field)  # Read a fresh entry for this field.
         try:
-            return validator(raw, field)
-
+            return validator(raw, field)  # Validate, convert if needed, and return.
         except ValueError as error:
-            print(error)
+            print(error)  # Explain the mistake; the loop then asks again.
 
 
 def read_interactive_age(pet_label):
-    while True:
+    """Read nonnegative years/months, repeating both if months exceed eleven."""
+    while True:  # Each iteration collects a complete age pair.
         years = read_interactive_field(
-            f"{pet_label} age in years",
-            validate_integer
-        )
-
+            f"{pet_label} age in years", validate_integer
+        )  # The integer validator rejects negative and non-integer input.
         months = read_interactive_field(
-            f"{pet_label} additional months",
-            validate_integer
-        )
-
-        if months <= 11:
-            return years, months
-
+            f"{pet_label} additional months", validate_integer
+        )  # Additional months must also be nonnegative integers.
+        if months <= 11:  # Check the upper bound specific to additional months.
+            return years, months  # Return the accepted age pair.
         print(
             f"Error: {pet_label} additional months "
             "must be between 0 and 11."
-        )
+        )  # Explain why the pair was rejected.
         print(
             "Help: Enter completed years and remaining months; "
             "for 15 months, use 1 year and 3 months."
-        )
+        )  # Give an example before the loop asks for both fields again.
 
 
-def choose_service_recovery():
+def read_cat_breed(name, age, age_months=0):
+    """Read a breed and return a Cat after its setter accepts the local name.
+
+    Retry only the breed after ValueError; previously entered names and ages
+    remain available. Construction calls the setter once per attempt.
+    No network recovery menu is needed because the reference is a Python list.
+    """
+    # Repeat this field until a supported breed is accepted.
     while True:
-        print()
-        print("1. Retry breed verification")
-        print("2. Return to the main menu")
-
-        choice = read_line("Choose an option (1-2)")
-
-        if choice in ("1", "2"):
-            return choice
-
-        print("Error: Menu choice must be 1 or 2.")
-        print(
-            "Help: Enter 1 to retry or "
-            "2 to return to the main menu."
-        )
-
-
-def read_cat_breed():
-    while True:
+        # Read new breed text; EOF and Ctrl+C propagate to main().
         raw = read_line("Cat breed")
-
-        while True:
-            try:
-                return validate_breed(raw, "Cat breed")
-
-            except ValueError as error:
-                print(error)
-                break
-
-            except BreedServiceError as error:
-                print(error)
-
-                choice = choose_service_recovery()
-
-                if choice == "2":
-                    raise ReturnToMenu()
+        try:
+            # The constructor calls set_breed(), which validates before storing.
+            return Cat(name, age, raw, age_months)
+        except ValueError as error:
+            # Explain the problem, then repeat the breed prompt.
+            print(error)
 
 
 def print_result(pet, cat):
-    pet.print_info()
-    cat.print_info()
-    print(f"   Breed: {cat.breed}")
+    """Print shared information for each object and read breed via its getter."""
+    pet.print_info()  # Display the generic pet's name and formatted age.
+    cat.print_info()  # Use the inherited method for the cat's name and age.
+    print(f"   Breed: {cat.get_breed()}")  # Read breed through the public getter.
 
 
 def run_interactive():
-    pet_name = read_interactive_field(
-        "Pet name",
-        validate_text
-    )
+    """Collect one entry, finish both objects, then display the result.
 
-    pet_years, pet_months = read_interactive_age("Pet")
-
-    cat_name = read_interactive_field(
-        "Cat name",
-        validate_text
-    )
-
-    cat_years, cat_months = read_interactive_age("Cat")
-
-    cat_breed = read_cat_breed()
-
-    # Create both objects only after all fields are valid.
+    Input order stays Pet name, Pet age, Cat name, Cat age, Cat breed.
+    Cat construction is attempted at the breed step; it completes only when
+    the setter accepts the breed. Pet is then created and both are displayed.
+    """
+    pet_name = read_interactive_field("Pet name", validate_text)  # Validate name.
+    pet_years, pet_months = read_interactive_age("Pet")  # Collect the first age.
+    cat_name = read_interactive_field("Cat name", validate_text)  # Validate name.
+    cat_years, cat_months = read_interactive_age("Cat")  # Collect the second age.
+    cat = read_cat_breed(cat_name, cat_years, cat_months)  # Obtain a verified Cat.
     pet = Pet(
-        name=pet_name,
-        age=pet_years,
-        age_months=pet_months
-    )
-
-    cat = Cat(
-        name=cat_name,
-        age=cat_years,
-        breed=cat_breed,
-        age_months=cat_months
-    )
-
-    print()
-    print_result(pet, cat)
+        name=pet_name, age=pet_years, age_months=pet_months
+    )  # Create the separate generic Pet after the complete entry is accepted.
+    print()  # Separate prompts from results.
+    print_result(pet, cat)  # Return to main after displaying this entry.
 
 
 def main():
-    try:
-        while True:
-            print()
-            print("Pet and Cat Information")
+    """Repeat the menu; handle EOF and keyboard cancellation.
+
+    Return 1 for incomplete input. Normal exit and Ctrl+C return None, which
+    sys.exit treats as a successful exit, preserving the previous behavior.
+    """
+    try:  # Handle interruptions anywhere in the menu or entry workflow.
+        while True:  # Successful entries return here for another menu choice.
+            print()  # Add spacing before the menu.
+            print("Pet and Cat Information")  # Display the program heading.
             print()
             print("1. Enter pet and cat information")
             print("2. Exit")
             print()
-
-            choice = read_line("Choose an option (1-2)")
-
+            choice = read_line("Choose an option (1-2)")  # Read the menu choice.
             if choice == "1":
-                print()
-
-                try:
-                    run_interactive()
-
-                except ReturnToMenu:
-                    print(
-                        "Entry stopped. "
-                        "No completed result was printed."
-                    )
-
+                print()  # Separate menu from entry prompts.
+                run_interactive()  # Collect and print one complete entry.
             elif choice == "2":
-                print("Goodbye.")
-                return
-
+                print("Goodbye.")  # Acknowledge the request to exit.
+                return  # End the menu loop and main function.
             else:
                 print("Error: Menu choice must be 1 or 2.")
-                print(
-                    "Help: Enter 1 to enter information "
-                    "or 2 to exit."
-                )
-
+                print("Help: Enter 1 to enter information or 2 to exit.")
+                # The loop displays the menu again after an invalid choice.
     except IncompleteInputError as error:
         print(
             f"\nError: The input ended before {error} was provided.\n"
             "Help: Run the program again and complete the entry.",
-            file=sys.stderr
+            file=sys.stderr  # Send the incomplete-input message to the error stream.
         )
-        return 1
-
+        return 1  # Report incomplete input to the operating system.
     except KeyboardInterrupt:
         print(
             "\nEntry cancelled.\n"
             "You can run the program again when you are ready.",
-            file=sys.stderr
+            file=sys.stderr  # Display a friendly cancellation message.
         )
-        return
+        return  # End the program without showing a traceback.
 
 
-if __name__ == "__main__":
-    sys.exit(main())
+if __name__ == "__main__":  # Run the menu only when this file is executed directly.
+    sys.exit(main())  # Pass main's return value to the operating system.
