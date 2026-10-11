@@ -17,7 +17,7 @@ The original Q1 uses five input lines and a specified output format. This versio
 - A terminal or PyCharm with that Python interpreter selected.
 - No third-party packages, API keys, or internet connection are needed to run the program.
 
-Keep these four files together in one folder:
+Keep these four required application files together in one folder. To reproduce the measured efficiency result, also include the separate `Benchmark.py` script in that folder:
 
 | File | Responsibility |
 | --- | --- |
@@ -25,10 +25,11 @@ Keep these four files together in one folder:
 | `validation.py` | Text and nonnegative integer validation |
 | `age_utils.py` | Readable age descriptions using a list, `append()`, and `join()` |
 | `breed_service.py` | A fixed list of 106 supported names and breed validation |
+| `Benchmark.py` | Optional performance-measurement script used for the reported efficiency result; not needed to run `main.py` |
 
 Download and extract the project if necessary. Use the exact filenames above, without download suffixes such as `(1)`. No package installation or environment variables are required.
 
-In PyCharm, open the project folder, select an installed Python 3 interpreter for the project, and run `main.py`. Alternatively, open a terminal in the folder containing the four files and run:
+In PyCharm, open the project folder, select an installed Python 3 interpreter for the project, and run `main.py`. Alternatively, open a terminal in the folder containing the four required application files and run:
 
 ```bash
 python main.py
@@ -282,6 +283,45 @@ Pet Information:
    Breed: Persian
 ```
 
+## Performance benchmark (reproduce the presentation result)
+
+The presentation reports a **median local execution time of 2.15 microseconds (µs) per operation** from the author's October 11, 2026 PyCharm run on macOS. This is an **observed result on that machine**, not a guaranteed execution time on other computers.
+
+Upload `Benchmark.py` to the GitHub repository alongside `main.py`, `validation.py`, `age_utils.py`, and `breed_service.py`. `Benchmark.py` is an additional reproducibility file, **not** a requirement for running the Pet/Cat application. **Use the exact capitalization `Benchmark.py`**, particularly on case-sensitive systems.
+
+From the project directory, with the same Python environment as the application, run:
+
+```bash
+python Benchmark.py
+```
+
+If your system uses `python3` as the command, run:
+
+```bash
+python3 Benchmark.py
+```
+
+In PyCharm, you can instead right-click `Benchmark.py` and select **Run 'Benchmark'**. The result appears in the **Run** tool window. The author's recorded result was:
+
+```text
+Median execution time: 2.15 μs
+
+Process finished with exit code 0
+```
+
+### What the benchmark measures
+
+The benchmark function from the presentation:
+
+1. Validates **two names** with `validate_text()`.
+2. Validates **four age values** (years and additional months for Pet and Cat) with `validate_integer()`.
+3. Validates the Cat breed using the program's **local breed list** as part of creating the Cat object.
+4. Creates one **Pet** and one **Cat** object.
+
+It uses Python's built-in `timeit.repeat()` with **7 repeats of 10,000 executions each**. For each repeat, elapsed time is divided by 10,000 to calculate time per operation, converted to microseconds, and the **median of the seven per-operation measurements** is reported. No third-party packages are required.
+
+**Scope:** This microbenchmark does **not** measure the full interactive session. It excludes user typing, menu interaction, printing the results, and file/network activity. Results will vary with Python version, CPU, system load, and environment. To compare results fairly, keep the benchmark code and measurement procedure unchanged and record the interpreter/version used. The fixed-size core operation can be described as **O(1)** under fixed input-size bounds and a fixed breed list; that theoretical characterization is different from the measured 2.15 µs.
+
 ## Verification
 
 The recorded Max/Mimi run above was completed in PyCharm on macOS on October 11, 2026. It demonstrates:
@@ -315,7 +355,7 @@ The recorded transcript does not include a Python version or process exit-code l
 - Validation rules are deliberately limited to English letters and selected punctuation.
 - Names and ages can still be changed directly through public attributes.
 - The menu creates and displays entries; it does not save records, export files, or offer editing of previous entries.
-- No execution-time or memory benchmark is included.
+- The included local `Benchmark.py` script measures only selected validation and object-creation operations; it does not benchmark full interactive runtime or memory usage.
 
 Possible future work includes a separate original-Q1 mode, additional reference aliases, and controlled age updates. These are optional improvements, not implemented features.
 
