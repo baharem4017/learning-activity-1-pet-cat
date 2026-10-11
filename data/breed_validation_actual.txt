@@ -5,21 +5,32 @@ Pet and Cat Information
 
 Choose an option (1-2): 1
 
-Pet name: dobby
+Pet name: Max
+Pet age in years: E
+Error: Pet age in years must be a whole number.
+Help: Enter 0 or a positive integer. Do not enter decimals or words.
 Pet age in years: 0
 Pet additional months: 6
-Cat name: bj
-Cat age in years: 3
-Cat additional months: 2
-Cat breed: jhgfuf
-Error: Cat breed was not found in the online reference.
-Help: Check the spelling and enter the full breed name, such as Persian or Scottish Fold.
-Cat breed: Persian
+Cat name: Mimi
+Cat age in years: 2
+Cat additional months: 1
+Cat breed: HGF
+Error: Cat breed was not found in the supported breed list.
+Help: Check the spelling and enter a supported breed name, such as Persian or Scottish Fold.
+Cat breed: PERSIAN
 
 Pet Information:
-   Name: dobby
+   Name: Max
    Age: 6 months
 Pet Information:
-   Name: bj
-   Age: 3 years and 2 months
-   Breed: Persian
+   Name: Mimi
+   Age: 2 years and 1 month
+   Breed: PERSIAN
+
+Pet and Cat Information
+
+1. Enter pet and cat information
+2. Exit
+
+Choose an option (1-2): 2
+Goodbye.
