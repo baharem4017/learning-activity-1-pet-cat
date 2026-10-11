@@ -9,11 +9,11 @@ Demonstrate Python inheritance with a `Pet` base class and a `Cat` subclass. Eac
 
 The original Q1 uses five input lines and a specified output format. This version is an **interactive extension**, with a menu, years and additional months, input correction, a local supported-breed list, and controlled breed access through a getter and setter. These extensions are not presented as instructor requirements.
 
-**This `main.py` does not implement the original prompt-free, five-line interface.** Original assignment sample files, if retained, are historical materials and cannot be used unchanged as input to this version. Its age descriptions also differ from the original numeric output.
+**This `main.py` does not implement the original prompt-free, five-line interface.** The instructor’s five-line sample needs the menu choice and additional-month inputs to be used with this interactive program. Its age descriptions also differ from the original numeric output.
 
 ## Requirements and environment setup
 
-- An installed Python 3 interpreter supporting f-strings (Python 3.6 or later).
+- An installed Python 3 interpreter supporting f-strings. Use the Python 3 interpreter selected for this project in PyCharm.
 - A terminal or PyCharm with that Python interpreter selected.
 - No third-party packages, API keys, or internet connection are needed to run the program.
 
@@ -22,11 +22,11 @@ Keep these four files together in one folder:
 | File | Responsibility |
 | --- | --- |
 | `main.py` | Pet/Cat classes, menu, prompts, recovery, and output |
-| `validation.py` | Text and nonnegative integer validation using explicit loops |
+| `validation.py` | Text and nonnegative integer validation |
 | `age_utils.py` | Readable age descriptions using a list, `append()`, and `join()` |
 | `breed_service.py` | A fixed list of 106 supported names and breed validation |
 
-Download and extract the project if necessary. Use the exact filenames above, without download suffixes such as `(1)`. No package installation or environment variables are required. An existing `CAT_API_KEY` setting has no effect on this version.
+Download and extract the project if necessary. Use the exact filenames above, without download suffixes such as `(1)`. No package installation or environment variables are required.
 
 In PyCharm, open the project folder, select an installed Python 3 interpreter for the project, and run `main.py`. Alternatively, open a terminal in the folder containing the four files and run:
 
@@ -46,11 +46,11 @@ You can check the selected command with `python --version` or `python3 --version
 
 The program accepts Pet and Cat information from the user. This input is separate from the local breed reference; neither is a machine-learning training dataset.
 
-`CAT_BREEDS` in `breed_service.py` contains all 106 names copied from the supplied `cat_breeds_reference(10).json`. The supplied file identifies its source as The Cat API and records a download timestamp of `2026-10-06T20:49:18.715858+00:00`. These are the file's recorded metadata, not a new verification of the live service.
+`CAT_BREEDS` in `breed_service.py` contains 106 supported names. Source metadata for the reference list identifies The Cat API and a download date of October 6, 2026.
 
-The JSON may be retained as `data/cat_breeds_reference.json` for provenance, but **the program does not read it at runtime**. Editing that JSON will not update the Python list. To change supported names, edit `CAT_BREEDS`, keeping the comparison names lowercase and words separated by single spaces.
+The reference names are stored directly in the Python list. To change supported names, edit `CAT_BREEDS`, using lowercase names with single spaces between words, then restart the program.
 
-The list defines names supported by this project; it is not a claim to cover every recognized cat breed. The program has no online verification, reference-download step, or service-recovery menu.
+The list defines the names supported by this project, not every recognized cat breed. User entries are checked against this list locally.
 
 ## Menu and input order
 
@@ -81,13 +81,13 @@ Run `main.py` and enter the following answers, one per prompt. The initial `1` s
 
 ```text
 1
-Dobby
+Max
+0
+6
+Mimi
 2
-0
-Luna
-0
-7
-Persian
+1
+PERSIAN
 2
 ```
 
@@ -95,15 +95,15 @@ The result section should be:
 
 ```text
 Pet Information:
-   Name: Dobby
-   Age: 2 years
+   Name: Max
+   Age: 6 months
 Pet Information:
-   Name: Luna
-   Age: 7 months
-   Breed: Persian
+   Name: Mimi
+   Age: 2 years and 1 month
+   Breed: PERSIAN
 ```
 
-Menu text and input prompts also appear during the run. There is no saved-reference or online-service notice. Attribute lines begin with three spaces. PyCharm's process-completion message is not part of the program's output.
+Menu text and input prompts also appear during the run. Attribute lines begin with three spaces. PyCharm's process-completion message is not part of the program's output.
 
 The first block describes the generic Pet; the second describes the Cat. Separate instances retain their own values. `print_result()` calls the inherited printing method and then reads the cat's breed through `get_breed()`.
 
@@ -124,9 +124,11 @@ If changing numeric limits, also update error messages that mention their values
 
 Names and breed text must be nonempty and contain at least one English letter. Only English letters, ordinary spaces, hyphens, and apostrophes are accepted. Digits, control characters, and other symbols are rejected.
 
-`remove_edge_spaces()` removes ordinary spaces at either end using loops, without `strip()`. Capitalization and internal spaces are preserved. Validation uses explicit `for` loops instead of `any()`.
+Ordinary spaces at either end of a name or breed are ignored. Capitalization and internal spaces are preserved.
 
 Breed text must additionally match `CAT_BREEDS`. Matching uses a lowercase copy with repeated spaces reduced for comparison only. Thus `Persian` and `PERSIAN` both match, and `Scottish  Fold` matches `scottish fold`. Output preserves the accepted text's capitalization and internal spacing.
+
+Blank inputs do not select defaults. There is no fixed retry limit: the program continues asking until input is valid or the user ends/cancels the program.
 
 ### Years and months
 
@@ -157,7 +159,7 @@ Name and age attributes remain public. This extension controls breed assignment 
 
 `read_cat_breed(name, age, age_months)` attempts Cat construction inside its correction loop and returns the accepted **Cat object**, not a string. Failed attempts do not return a completed Cat to the caller. Once Cat construction succeeds, the separate Pet is created and both are printed. No completed information blocks appear before all entry fields are accepted.
 
-This program does not override `Cat.print_info()` or implement the previously discussed optional polymorphism demonstration.
+The current Cat inherits `print_info()` without overriding it. An optional polymorphism extension could give Cat its own printing method and use a shared loop, but that alternative is not implemented here.
 
 ## Reproduce corrections and interruptions
 
@@ -196,13 +198,114 @@ Help: Run the program again and complete the entry.
 
 A blank answer is different from EOF: a blank answer can be corrected, while EOF means no more input is available. EOF returns status 1. Normal exit and the handled Ctrl+C cancellation return status 0. Interruption messages are written to standard error.
 
-## Verification of this revision
+## Recorded run: input correction in PyCharm
 
-The four current modules were run together in the preparation environment on October 11, 2026. These scenarios passed: successful entry and exit, unsupported-breed correction, correction of an age pair with excess months, EOF at Pet name, and immediate menu exit.
+The following transcript was supplied from the author's local PyCharm run on macOS on October 11, 2026. The exact interpreter version was not recorded for this run. Text after each prompt is the entered answer.
 
-Earlier focused checks in this revision process also confirmed all 106 reference names were copied and accepted, rejected setter updates retained the previous breed, simplified validation matched the previous implementation in 1,116 comparisons, and age formatting matched in 60 valid year/month combinations. The final age formatter was then restored to the original implementation with only docstrings/comments added; that implementation equivalence was checked.
+This example shows correction of a nonnumeric age and an unsupported breed, acceptance of uppercase breed text, age formatting, return to the menu, and exit. It does not test the upper month boundary.
 
-These checks do not establish exhaustive correctness, a fresh installation on another computer, or performance benchmarks. Previous online/saved-reference transcripts describe the retired implementation and are not evidence of this version's runtime behavior. No exact local PyCharm interpreter version is claimed here.
+```text
+Pet and Cat Information
+
+1. Enter pet and cat information
+2. Exit
+
+Choose an option (1-2): 1
+
+Pet name: Max
+Pet age in years: E
+Error: Pet age in years must be a whole number.
+Help: Enter 0 or a positive integer. Do not enter decimals or words.
+Pet age in years: 0
+Pet additional months: 6
+Cat name: Mimi
+Cat age in years: 2
+Cat additional months: 1
+Cat breed: HGF
+Error: Cat breed was not found in the supported breed list.
+Help: Check the spelling and enter a supported breed name, such as Persian or Scottish Fold.
+Cat breed: PERSIAN
+
+Pet Information:
+   Name: Max
+   Age: 6 months
+Pet Information:
+   Name: Mimi
+   Age: 2 years and 1 month
+   Breed: PERSIAN
+
+Pet and Cat Information
+
+1. Enter pet and cat information
+2. Exit
+
+Choose an option (1-2): 2
+Goodbye.
+```
+
+To repeat this test, enter the answers shown after each prompt, including `E` and `HGF`. The program retries the affected field rather than replacing it with a default. `PERSIAN` remains uppercase in the displayed result because normalization is used only for comparison.
+
+## Example: correcting additional months
+
+Use the following sequence for a separate test. This is a reproduction recipe with expected output, not a claim that this exact Max/Mimi sequence was run locally.
+
+| Prompt | Answer |
+| --- | --- |
+| Menu | `1` |
+| Pet name | `Max` |
+| Pet years | `1` |
+| Pet months | `12` |
+| Pet years again | `1` |
+| Pet months again | `3` |
+| Cat name | `Mimi` |
+| Cat years | `2` |
+| Cat months | `1` |
+| Cat breed | `Persian` |
+| Menu after the result | `2` |
+
+After entering `12`, expect:
+
+```text
+Error: Pet additional months must be between 0 and 11.
+Help: Enter completed years and remaining months; for 15 months, use 1 year and 3 months.
+```
+
+The program asks for Pet years and months again. After correction and completion, expect this result section:
+
+```text
+Pet Information:
+   Name: Max
+   Age: 1 year and 3 months
+Pet Information:
+   Name: Mimi
+   Age: 2 years and 1 month
+   Breed: Persian
+```
+
+## Verification
+
+The recorded Max/Mimi run above was completed in PyCharm on macOS on October 11, 2026. It demonstrates:
+
+- Rejection and correction of a nonnumeric year entry.
+- Rejection and correction of an unsupported breed.
+- Acceptance of uppercase breed text.
+- Correct display of months alone and combined years/months.
+- Return to the main menu after the result.
+- The `Goodbye.` message after choosing option 2.
+
+The recorded transcript does not include a Python version or process exit-code line. Additional scenarios in this README are instructions for reproducing and checking expected behavior; they are not all demonstrated by this transcript.
+
+`data/breed_validation_actual.txt` can hold the recorded transcript, and `data/verification_notes.txt` can summarize completed checks. These documentation files are not read by the program.
+
+## Troubleshooting
+
+| Symptom | What to check |
+| --- | --- |
+| `ModuleNotFoundError` for a project module | Keep all four Python files together with the exact filenames shown above. |
+| `IndentationError` after copying code | Replace the complete affected file with the intended version; check indentation and list brackets rather than appending new code below old code. |
+| Valid-looking breed is rejected | Check spelling against `CAT_BREEDS`; a missing name is unsupported, not proof that the breed does not exist. |
+| Program asks for years again | A month value above 11 restarts that animal's age pair. |
+| Menu choice is rejected | Enter exactly `1` or `2`, without surrounding spaces. |
 
 ## Limitations and possible improvements
 
@@ -216,9 +319,9 @@ These checks do not establish exhaustive correctness, a fresh installation on an
 
 Possible future work includes a separate original-Q1 mode, additional reference aliases, and controlled age updates. These are optional improvements, not implemented features.
 
-## Sources and retained materials
+## Sources
 
 - Q1 Pet Information: instructor-supplied learning activity.
-- Supplied breed-reference JSON: metadata identifies The Cat API and its recorded download date.
+- Breed-list source: The Cat API, as identified in reference metadata dated October 6, 2026. Supported names are stored in `breed_service.py`.
 
-Original five-line samples and older online/offline transcripts, if kept in the repository, should be labeled historical. Use the input sequence and expected result in this README to reproduce the current interactive version.
+Use the input sequences and expected results in this README to reproduce the current interactive version. Retained original five-line samples describe the basic assignment interface.
