@@ -1,15 +1,29 @@
-Q1 Sample Verification
+Current Interactive Version — Verification Notes
 
-Execution date: October 6, 2026
-Environment: PyCharm on macOS
-Python version: 3.14.7
+Changes from the original Q1 implementation:
+- Interactive menu.
+- Age entry using completed years and additional months.
+- Input validation with correction.
+- Breed validation against a local list of 106 supported names.
+- Breed getter and validated setter.
 
-Instructor sample: Passed.
-Program exit code: 0.
+Verification date: October 11, 2026
+Environment: Code-preparation environment, not local PyCharm.
 
-The actual output was compared with the expected output
-using PyCharm Compare Files.
-PyCharm displayed: Contents are identical.
+Checks performed:
+- Successful Pet and Cat entry and output: Passed.
+- Unsupported breed followed by correction: Passed.
+- Months above 11 followed by age-pair correction: Passed.
+- End of input at Pet name: Passed; exit code 1.
+- Menu option 2: Passed; exit code 0.
 
-Additional validation tests: Not executed.
-Years-and-months extension: Not implemented.
+Local PyCharm verification:
+Execution date: Not yet recorded.
+Operating system: Not yet recorded.
+Python version: Not yet recorded.
+Results: Pending local verification.
+
+Assignment sample:
+The original five-line instructor sample belongs to the
+basic Q1 implementation. The current interactive version
+requires a menu choice and separate years-and-months inputs.
