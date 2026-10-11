@@ -1,19 +1,34 @@
-Pet name: Dobby
-Pet age in years: 0
+Pet and Cat Information
+
+1. Enter pet and cat information
+2. Exit
+
+Choose an option (1-2): 1
+
+Pet name: MAX
+Pet age in years: 3
 Pet additional months: 12
 Error: Pet additional months must be between 0 and 11.
 Help: Enter completed years and remaining months; for 15 months, use 1 year and 3 months.
-Pet age in years: 1
-Pet additional months: 0
-Cat name: Luna
-Cat age in years: 2
-Cat additional months: 1
-Cat breed: Persian
+Pet age in years: 2
+Pet additional months: 11
+Cat name: Mimi
+Cat age in years: 0
+Cat additional months: 3
+Cat breed: persian
 
 Pet Information:
-   Name: Dobby
-   Age: 1 year
+   Name: MAX
+   Age: 2 years and 11 months
 Pet Information:
-   Name: Luna
-   Age: 2 years and 1 month
-   Breed: Persian
+   Name: Mimi
+   Age: 3 months
+   Breed: persian
+
+Pet and Cat Information
+
+1. Enter pet and cat information
+2. Exit
+
+Choose an option (1-2): 2
+Goodbye.
