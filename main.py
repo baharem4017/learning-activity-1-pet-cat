@@ -1,4 +1,4 @@
-"""Run the interactive Pet/Cat activity with controlled breed assignment.
+"""Run the interactive Pet/Cat activity with breed validation at construction.
 
 Keep validation.py, age_utils.py, breed_service.py beside this file. Cat inherits Pet.print_info(); breed is printed separately.
 Docstrings explain each component; comments explain statements and decisions.
@@ -18,7 +18,7 @@ class Pet:
         """Store the supplied name, completed years, and additional months.
 
         The interactive workflow validates these values before construction.
-        These three attributes remain public, as in the previous version.
+        These three attributes are public.
         """
         self.name = name  # Store this object's name.
         self.age = age  # Store completed years.
@@ -32,34 +32,17 @@ class Pet:
 
 
 class Cat(Pet):
-    """Extend Pet with a breed accessed through a getter and validated setter.
-
-    __breed uses Python name mangling to discourage accidental direct access;
-    it is not a security barrier. Use get_breed() and set_breed() as the API.
-    """
+    """Extend Pet with a public breed validated when the object is created."""
 
     def __init__(self, name, age, breed, age_months=0):
-        """Initialize inherited attributes and accept only a verified breed.
+        """Initialize the shared attributes and store a supported breed.
 
-        ValueError propagates to the caller if validation
-        fails. In that case construction does not return a Cat to the caller.
+        validate_breed checks the text and local breed list. Invalid input
+        raises ValueError, so construction does not return a Cat to the caller.
+        Later direct assignments to breed do not automatically validate it.
         """
         Pet.__init__(self, name, age, age_months)  # Initialize this Cat's Pet data.
-        self.set_breed(breed)  # Use the same check for creation and later changes.
-
-    def get_breed(self):
-        """Return the accepted breed for display or other read-only use."""
-        return self.__breed  # Read the stored value without changing it.
-
-    def set_breed(self, breed):
-        """Validate and store a breed, preserving the previous value on failure.
-
-        validate_breed checks text and reference membership, returning accepted
-        text. It raises ValueError for invalid input or an unsupported breed.
-        The caller decides how to recover.
-        """
-        valid_breed = validate_breed(breed, "Cat breed")  # May raise before storing.
-        self.__breed = valid_breed  # Update only after verification succeeds.
+        self.breed = validate_breed(breed, "Cat breed")  # Check before storing.
 
 
 class IncompleteInputError(Exception):
@@ -107,10 +90,10 @@ def read_interactive_age(pet_label):
 
 
 def read_cat_breed(name, age, age_months=0):
-    """Read a breed and return a Cat after its setter accepts the local name.
+    """Read a breed and return a Cat after its constructor validates it.
 
     Retry only the breed after ValueError; previously entered names and ages
-    remain available. Construction calls the setter once per attempt.
+    remain available. Construction validates the breed once per attempt.
     No network recovery menu is needed because the reference is a Python list.
     """
     # Repeat this field until a supported breed is accepted.
@@ -118,7 +101,7 @@ def read_cat_breed(name, age, age_months=0):
         # Read new breed text; EOF and Ctrl+C propagate to main().
         raw = read_line("Cat breed")
         try:
-            # The constructor calls set_breed(), which validates before storing.
+            # The constructor validates the breed before storing it.
             return Cat(name, age, raw, age_months)
         except ValueError as error:
             # Explain the problem, then repeat the breed prompt.
@@ -126,10 +109,10 @@ def read_cat_breed(name, age, age_months=0):
 
 
 def print_result(pet, cat):
-    """Print shared information for each object and read breed via its getter."""
+    """Print shared information for each object, then the public cat breed."""
     pet.print_info()  # Display the generic pet's name and formatted age.
     cat.print_info()  # Use the inherited method for the cat's name and age.
-    print(f"   Breed: {cat.get_breed()}")  # Read breed through the public getter.
+    print(f"   Breed: {cat.breed}")  # Display the validated breed stored in this Cat.
 
 
 def run_interactive():
@@ -137,7 +120,7 @@ def run_interactive():
 
     Input order stays Pet name, Pet age, Cat name, Cat age, Cat breed.
     Cat construction is attempted at the breed step; it completes only when
-    the setter accepts the breed. Pet is then created and both are displayed.
+    the breed passes validation. Pet is then created and both are displayed.
     """
     pet_name = read_interactive_field("Pet name", validate_text)  # Validate name.
     pet_years, pet_months = read_interactive_age("Pet")  # Collect the first age.
@@ -155,7 +138,7 @@ def main():
     """Repeat the menu; handle EOF and keyboard cancellation.
 
     Return 1 for incomplete input. Normal exit and Ctrl+C return None, which
-    sys.exit treats as a successful exit, preserving the previous behavior.
+    sys.exit treats as a successful exit.
     """
     try:  # Handle interruptions anywhere in the menu or entry workflow.
         while True:  # Successful entries return here for another menu choice.

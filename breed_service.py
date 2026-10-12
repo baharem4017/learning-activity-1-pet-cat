@@ -134,7 +134,7 @@ def validate_breed(raw, field):
     Raises:
         ValueError: The text is invalid or its breed is not in the local list.
 
-    Cat.set_breed() calls this function before updating the stored breed.
+    The Cat constructor calls this function before storing the public breed.
     The interactive input loop catches ValueError and asks for another entry.
     """
     # Reject invalid text and obtain the accepted text from the shared validator.

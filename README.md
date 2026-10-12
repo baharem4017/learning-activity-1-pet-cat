@@ -7,7 +7,7 @@
 
 Demonstrate Python inheritance with a `Pet` base class and a `Cat` subclass. Each object has its own name and age. `Cat` adds a breed and inherits `Pet.print_info()` without overriding it. The program prints the cat's breed separately.
 
-The original Q1 uses five input lines and a specified output format. This version is an **interactive extension**, with a menu, years and additional months, input correction, a local supported-breed list, and controlled breed access through a getter and setter. These extensions are not presented as instructor requirements.
+The original Q1 uses five input lines and a specified output format. This version is an **interactive extension**, with a menu, years and additional months, input correction, a local supported-breed list, and breed validation during Cat construction. These extensions are not presented as instructor requirements.
 
 **This `main.py` does not implement the original prompt-free, five-line interface.** The instructor’s five-line sample needs the menu choice and additional-month inputs to be used with this interactive program. Its age descriptions also differ from the original numeric output.
 
@@ -106,7 +106,7 @@ Pet Information:
 
 Menu text and input prompts also appear during the run. Attribute lines begin with three spaces. PyCharm's process-completion message is not part of the program's output.
 
-The first block describes the generic Pet; the second describes the Cat. Separate instances retain their own values. `print_result()` calls the inherited printing method and then reads the cat's breed through `get_breed()`.
+The first block describes the generic Pet; the second describes the Cat. Separate instances retain their own values. `print_result()` calls the inherited printing method and then prints the cat's public `breed` attribute separately.
 
 ## Parameters and validation rules
 
@@ -147,16 +147,17 @@ For a total age of 15 months, enter `1` year and `3` additional months. The form
 | 1 | 1 | `1 year and 1 month` |
 | 0 | 0 | `0 months` |
 
-## Breed encapsulation and program flow
+## Breed validation and program flow
 
-`Cat.__init__()` calls `Pet.__init__()` for the shared attributes, then calls `set_breed()`.
+`Cat.__init__()` calls `Pet.__init__()` for the shared attributes, then validates and stores the public breed:
 
-- `set_breed()` calls `validate_breed()` and stores the accepted value in `__breed`.
-- If validation fails, it raises `ValueError` before replacing the stored breed.
-- `get_breed()` returns the stored value without validating again.
-- Double underscores use Python name mangling to discourage accidental access; they are not a security boundary.
+```python
+self.breed = validate_breed(breed, "Cat breed")
+```
 
-Name and age attributes remain public. This extension controls breed assignment through the documented getter/setter interface; it does not make every attribute private.
+`validate_breed()` checks the text and supported-breed list. Invalid input raises `ValueError`; only accepted text is stored. There are no breed getter or setter methods. The output function reads `cat.breed` directly.
+
+Name, age, and breed attributes are public. Breed validation runs during construction; later direct assignments do not automatically run validation. The interactive menu does not offer updates to existing objects.
 
 `read_cat_breed(name, age, age_months)` attempts Cat construction inside its correction loop and returns the accepted **Cat object**, not a string. Failed attempts do not return a completed Cat to the caller. Once Cat construction succeeds, the separate Pet is created and both are printed. No completed information blocks appear before all entry fields are accepted.
 
@@ -283,9 +284,9 @@ Pet Information:
    Breed: Persian
 ```
 
-## Performance benchmark (reproduce the presentation result)
+## Performance benchmark
 
-The presentation reports a **median local execution time of 2.15 microseconds (µs) per operation** from the author's October 11, 2026 PyCharm run on macOS. This is an **observed result on that machine**, not a guaranteed execution time on other computers.
+The presentation reports a **median local execution time of 2.15 microseconds (µs) per operation** from the author's October 11, 2026 PyCharm run on macOS. This is a historical measurement of the earlier implementation on that machine, not a measurement of the current public-breed implementation. Run `Benchmark.py` again with the current files and record the new result before reporting its efficiency. Timing is not guaranteed to match across runs or computers.
 
 Upload `Benchmark.py` to the GitHub repository alongside `main.py`, `validation.py`, `age_utils.py`, and `breed_service.py`. `Benchmark.py` is an additional reproducibility file, **not** a requirement for running the Pet/Cat application. **Use the exact capitalization `Benchmark.py`**, particularly on case-sensitive systems.
 
@@ -324,6 +325,9 @@ It uses Python's built-in `timeit.repeat()` with **7 repeats of 10,000 execution
 
 ## Verification
 
+A targeted check of the current public-breed implementation was run on October 12, 2026 in a separate execution environment. It confirmed accepted `PERSIAN`, rejected `HGF`, and replayed the Max/Mimi interaction with invalid year and breed corrections. Standard output, standard error, and exit status matched the earlier implementation exactly for that sequence; exit status was 0. This check was not a new benchmark or a complete test of every scenario below.
+
+
 The recorded Max/Mimi run above was completed in PyCharm on macOS on October 11, 2026. It demonstrates:
 
 - Rejection and correction of a nonnumeric year entry.
@@ -353,7 +357,7 @@ The recorded transcript does not include a Python version or process exit-code l
 - Breed acceptance depends on the fixed supported-name list; aliases and unlisted names may be rejected.
 - The list does not refresh automatically.
 - Validation rules are deliberately limited to English letters and selected punctuation.
-- Names and ages can still be changed directly through public attributes.
+- Names, ages, and breed can be changed directly through public attributes; direct assignments do not automatically validate the new values.
 - The menu creates and displays entries; it does not save records, export files, or offer editing of previous entries.
 - The included local `Benchmark.py` script measures only selected validation and object-creation operations; it does not benchmark full interactive runtime or memory usage.
 
