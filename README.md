@@ -27,7 +27,6 @@ Keep these four required application files together in one folder. To reproduce 
 | `breed_service.py` | A fixed list of 106 supported names and breed validation |
 | `Benchmark.py` | Optional performance-measurement script used for the reported efficiency result; not needed to run `main.py` |
 
-Download and extract the project if necessary. Use the exact filenames above, without download suffixes such as `(1)`. No package installation or environment variables are required.
 
 In PyCharm, open the project folder, select an installed Python 3 interpreter for the project, and run `main.py`. Alternatively, open a terminal in the folder containing the four required application files and run:
 
