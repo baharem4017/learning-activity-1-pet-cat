@@ -356,7 +356,6 @@ The recorded Max/Mimi run above was completed in PyCharm on macOS on October 11,
 - The menu creates and displays entries; it does not save records, export files, or offer editing of previous entries.
 - The included local `Benchmark.py` script measures only selected validation and object-creation operations; it does not benchmark full interactive runtime or memory usage.
 
-Possible future work includes a separate original-Q1 mode, additional reference aliases, and controlled age updates. These are optional improvements, not implemented features.
 
 ## Sources
 
