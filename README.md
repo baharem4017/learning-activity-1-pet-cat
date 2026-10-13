@@ -121,7 +121,7 @@ If changing numeric limits, also update error messages that mention their values
 
 ### Text
 
-Names and breed text must be nonempty and contain at least one English letter. Only English letters, ordinary spaces, hyphens, and apostrophes are accepted. Digits, control characters, and other symbols are rejected.
+Names and breed text must be nonempty and contain at least one  letter. Only English letters, ordinary spaces, hyphens, and apostrophes are accepted. Digits, control characters, and other symbols are rejected.
 
 Ordinary spaces at either end of a name or breed are ignored. Capitalization and internal spaces are preserved.
 
