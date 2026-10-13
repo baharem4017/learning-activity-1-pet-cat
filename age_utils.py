@@ -1,4 +1,4 @@
-"""Format a pet's accepted age as readable English text.
+"""Format a pet's accepted age as readable text.
 
 This module only builds text. validation.py and main.py check the input;
 Pet.print_info() prints the text returned by format_age().
