@@ -1,6 +1,6 @@
 """Check names, breed text, and age numbers using explicit loops.
 
-This module uses no any() or strip(). Invalid input raises ValueError;
+Invalid input raises ValueError;
 main.py displays the message and asks the user to try again.
 """
 
