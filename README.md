@@ -102,7 +102,7 @@ Pet Information:
    Breed: PERSIAN
 ```
 
-Menu text and input prompts also appear during the run. Attribute lines begin with three spaces. PyCharm's process-completion message is not part of the program's output.
+Menu text and input prompts also appear during the run. Attribute lines begin with three spaces. 
 
 The first block describes the generic Pet; the second describes the Cat. Separate instances retain their own values. `print_result()` calls the inherited printing method and then prints the cat's public `breed` attribute separately.
 
