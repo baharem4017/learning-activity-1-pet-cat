@@ -9,7 +9,6 @@ Demonstrate Python inheritance with a `Pet` base class and a `Cat` subclass. Eac
 
 The original Q1 uses five input lines and a specified output format. This version is an **interactive extension**, with a menu, years and additional months, input correction, a local supported-breed list, and breed validation during Cat construction. These extensions are not presented as instructor requirements.
 
-**This `main.py` does not implement the original prompt-free, five-line interface.** The instructor’s five-line sample needs the menu choice and additional-month inputs to be used with this interactive program. Its age descriptions also differ from the original numeric output.
 
 ## Requirements and environment setup
 
