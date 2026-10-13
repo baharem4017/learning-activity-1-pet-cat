@@ -43,7 +43,7 @@ You can check the selected command with `python --version` or `python3 --version
 
 ## Data and reference source
 
-The program accepts Pet and Cat information from the user. This input is separate from the local breed reference; neither is a machine-learning training dataset.
+The program accepts Pet and Cat information from the user. This input is separate from the local breed reference.
 
 `CAT_BREEDS` in `breed_service.py` contains 106 supported names. Source metadata for the reference list identifies The Cat API and a download date of October 6, 2026.
 
