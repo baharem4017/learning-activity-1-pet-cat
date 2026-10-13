@@ -1,10 +1,3 @@
-"""Validate cat breeds against a fixed, local Python list.
-
-The supported names were copied from the supplied cat_breeds_reference(10).json.
-This is the project's reference list, not a claim to include every cat breed.
-The program does not read JSON, contact an API, or require an API key at runtime.
-"""
-
 # Reuse the project's existing checks for text length and allowed characters.
 from validation import validate_text
 
