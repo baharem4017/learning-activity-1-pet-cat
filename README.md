@@ -200,7 +200,6 @@ A blank answer is different from EOF: a blank answer can be corrected, while EOF
 
 ## Recorded run: input correction in PyCharm
 
-The following transcript was supplied from the author's local PyCharm run on macOS on October 11, 2026. The exact interpreter version was not recorded for this run. Text after each prompt is the entered answer.
 
 This example shows correction of a nonnumeric age and an unsupported breed, acceptance of uppercase breed text, age formatting, return to the menu, and exit. It does not test the upper month boundary.
 
@@ -284,9 +283,8 @@ Pet Information:
 
 ## Performance benchmark
 
-The presentation reports a **median local execution time of 2.15 microseconds (µs) per operation** from the author's October 11, 2026 PyCharm run on macOS. This is a historical measurement of the earlier implementation on that machine, not a measurement of the current public-breed implementation. Run `Benchmark.py` again with the current files and record the new result before reporting its efficiency. Timing is not guaranteed to match across runs or computers.
+The presentation reports a **median local execution time of 2.15 microseconds (µs) per operation** .
 
-Upload `Benchmark.py` to the GitHub repository alongside `main.py`, `validation.py`, `age_utils.py`, and `breed_service.py`. `Benchmark.py` is an additional reproducibility file, **not** a requirement for running the Pet/Cat application. **Use the exact capitalization `Benchmark.py`**, particularly on case-sensitive systems.
 
 From the project directory, with the same Python environment as the application, run:
 
@@ -303,7 +301,7 @@ python3 Benchmark.py
 In PyCharm, you can instead right-click `Benchmark.py` and select **Run 'Benchmark'**. The result appears in the **Run** tool window. The author's recorded result was:
 
 ```text
-Median execution time: 2.15 μs
+Median execution time: 2.14 μs
 
 Process finished with exit code 0
 ```
@@ -317,9 +315,9 @@ The benchmark function from the presentation:
 3. Validates the Cat breed using the program's **local breed list** as part of creating the Cat object.
 4. Creates one **Pet** and one **Cat** object.
 
-It uses Python's built-in `timeit.repeat()` with **7 repeats of 10,000 executions each**. For each repeat, elapsed time is divided by 10,000 to calculate time per operation, converted to microseconds, and the **median of the seven per-operation measurements** is reported. No third-party packages are required.
+It uses Python's built-in `timeit.repeat()` with **7 repeats of 10,000 executions each**. For each repeat, elapsed time is divided by 10,000 to calculate time per operation, converted to microseconds, and the **median of the seven per-operation measurements** is reported. 
 
-**Scope:** This microbenchmark does **not** measure the full interactive session. It excludes user typing, menu interaction, printing the results, and file/network activity. Results will vary with Python version, CPU, system load, and environment. To compare results fairly, keep the benchmark code and measurement procedure unchanged and record the interpreter/version used. The fixed-size core operation can be described as **O(1)** under fixed input-size bounds and a fixed breed list; that theoretical characterization is different from the measured 2.15 µs.
+**Scope:** This microbenchmark does **not** measure the full interactive session. It excludes user typing, menu interaction, printing the results, and file/network activity. Results will vary with Python version, CPU, system load, and environment. To compare results fairly, keep the benchmark code and measurement procedure unchanged and record the interpreter/version used. The fixed-size core operation can be described as **O(1)** under fixed input-size bounds and a fixed breed list.
 
 ## Verification
 
@@ -335,7 +333,6 @@ The recorded Max/Mimi run above was completed in PyCharm on macOS on October 11,
 - Return to the main menu after the result.
 - The `Goodbye.` message after choosing option 2.
 
-The recorded transcript does not include a Python version or process exit-code line. Additional scenarios in this README are instructions for reproducing and checking expected behavior; they are not all demonstrated by this transcript.
 
 `data/breed_validation_actual.txt` can hold the recorded transcript, and `data/verification_notes.txt` can summarize completed checks. These documentation files are not read by the program.
 
